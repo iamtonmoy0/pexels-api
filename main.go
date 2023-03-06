@@ -56,17 +56,16 @@ type PhotoSource struct {
 
 func (c *Client) SearchPhotos(query string, perPage, page int) (*SearchResult, error) {
 	url := fmt.Sprintf(PhotoApi+"/search?query=%&per_page=%d", query, perPage, page)
-	resp.err:= c.requestDoWithAuth("GET",url)
+	resp, err := c.requestDoWithAuth("GET", url)
 	defer resp.Body.Close()
-	data,err:= ioutil.ReadAll(resp.Body)
+	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 	var result SearchResult
-	err=json.Unmarshal(data,&result)
-	return &result,err
+	err = json.Unmarshal(data, &result)
+	return &result, err
 }
-
 
 func main() {
 	os.Setenv("PexelsToken", "OLY1UXu7nWNqhhiV5XXXTcU8SHJPaMUEWzotNouYLKhqNuTyLsnXjgxS")
