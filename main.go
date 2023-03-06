@@ -19,7 +19,17 @@ type Client struct {
 }
 
 func NewClient(token string) *Client {
+	c := http.Client{}
+	return &Client{Token: token, hc: c}
 
+}
+
+type SearchResult struct {
+	Page         int32
+	PerPage      int32
+	TotalResults int32
+	NextPage     string
+	Photos       []Photo
 }
 
 func main() {
