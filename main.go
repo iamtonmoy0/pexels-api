@@ -55,7 +55,7 @@ type PhotoSource struct {
 }
 
 func (c *Client) SearchPhotos(query string, perPage, page int) (*SearchResult, error) {
-	url := fmt.Sprintf(PhotoApi+"/search?query=%&per_page=%d", query, perPage, page)
+	url := fmt.Sprintf(PhotoApi+"/search?query=%s&per_page=%d&page=%d", query, perPage, page)
 	resp, err := c.requestDoWithAuth("GET", url)
 	defer resp.Body.Close()
 	data, err := ioutil.ReadAll(resp.Body)
