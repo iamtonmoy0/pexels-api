@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 )
 
@@ -10,6 +11,16 @@ const (
 	PhotoApi = "https://api.pexels.com/v1"
 	VideoApi = "https://api.pexels.com/videos"
 )
+
+type Client struct {
+	Token          string
+	hc             http.Client
+	RemainingTimes int32
+}
+
+func NewClient(token string) *Client {
+
+}
 
 func main() {
 	os.Setenv("PexelsToken", "OLY1UXu7nWNqhhiV5XXXTcU8SHJPaMUEWzotNouYLKhqNuTyLsnXjgxS")
