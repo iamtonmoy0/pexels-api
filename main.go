@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
@@ -51,6 +53,20 @@ type PhotoSource struct {
 	Landscape string `json:"landscape"`
 	Tiny      string `json:"tiny"`
 }
+
+func (c *Client) SearchPhotos(query string, perPage, page int) (*SearchResult, error) {
+	url := fmt.Sprintf(PhotoApi+"/search?query=%&per_page=%d", query, perPage, page)
+	resp.err:= c.requestDoWithAuth("GET",url)
+	defer resp.Body.Close()
+	data,err:= ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	var result SearchResult
+	err=json.Unmarshal(data,&result)
+	return &result,err
+}
+
 
 func main() {
 	os.Setenv("PexelsToken", "OLY1UXu7nWNqhhiV5XXXTcU8SHJPaMUEWzotNouYLKhqNuTyLsnXjgxS")
