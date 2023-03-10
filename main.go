@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 // api link
@@ -66,7 +67,25 @@ func (c *Client) SearchPhotos(query string, perPage, page int) (*SearchResult, e
 	err = json.Unmarshal(data, &result)
 	return &result, err
 }
+func (c *Client) requestDoWithAuth(method, url string) (*http.Response, err) {
+	req, err := http.NewRequest(method, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", c.Token)
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		return resp, err
+	}
+	times, err := strconv.Atoi(resp.Header.Get("X-Ratelimit-Remaining"))
+	if err != nil {
+		return resp, nil
+	} else {
+		c.RemainingTimes = int32(times)
+	}
+	return resp, nil
 
+}
 func main() {
 	os.Setenv("PexelsToken", "OLY1UXu7nWNqhhiV5XXXTcU8SHJPaMUEWzotNouYLKhqNuTyLsnXjgxS")
 	var TOKEN = os.Getenv("PexelsToken")
