@@ -17,6 +17,7 @@ const (
 	VideoApi = "https://api.pexels.com/videos"
 )
 
+// client struct
 type Client struct {
 	Token          string
 	hc             http.Client
@@ -29,6 +30,7 @@ func NewClient(token string) *Client {
 
 }
 
+// search struct
 type SearchResult struct {
 	Page         int32   `json:"page"`
 	PerPage      int32   `json:"per_page"`
@@ -36,6 +38,8 @@ type SearchResult struct {
 	NextPage     string  `json:"next_page"`
 	Photos       []Photo `json:"photos"`
 }
+
+// photo struct
 type Photo struct {
 	Id              int32       `json:"id"`
 	Width           int32       `json:"width"`
@@ -63,13 +67,38 @@ type VideoSearchResult struct {
 	NextPage     string  `json:"next_page"`
 	Videos       []Video `json:"videos"`
 }
+
+// video struct
 type Video struct {
+	Id            int32           `json:"id"`
+	Width         int32           `json:"width"`
+	Height        int32           `json:"height"`
+	Url           string          `json:"url"`
+	Image         string          `json:"image"`
+	FullRes       interface{}     `json:"full_res"`
+	Duration      float32         `json:"duration"`
+	VideoFiles    []VideoFiles    `json:"video_files"`
+	VideoPictures []VideoPictures `json:"video_pictures"`
 }
-type PopularVideo struct {
+type PopularVideos struct {
+	Page         int32   `json:"page"`
+	PerPage      int32   `json:"per_page"`
+	TotalResults int32   `json:"total_results"`
+	Url          string  `json:"url"`
+	Videos       []Video `json:"videos"`
 }
 type VideoFiles struct {
+	Id       int32  `json:"id"`
+	Quality  string `json:"quality"`
+	FileType string `json:"file_type"`
+	Width    int32  `json:"width"`
+	Height   int32  `json:"height"`
+	Link     string `json:"link"`
 }
 type VideoPictures struct {
+	Id      int32  `json:"id"`
+	Picture string `json:"picture"`
+	Nr      int32  `json:"nr"`
 }
 
 func (c *Client) SearchPhotos(query string, perPage, page int) (*SearchResult, error) {
