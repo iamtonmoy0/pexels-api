@@ -56,6 +56,21 @@ type PhotoSource struct {
 	Landscape string `json:"landscape"`
 	Tiny      string `json:"tiny"`
 }
+type VideoSearchResult struct {
+	Page         int32   `json:"page"`
+	PerPage      int32   `json:"per_page"`
+	TotalResults int32   `json:"total_results"`
+	NextPage     string  `json:"next_page"`
+	Videos       []Video `json:"videos"`
+}
+type Video struct {
+}
+type PopularVideo struct {
+}
+type VideoFiles struct {
+}
+type VideoPictures struct {
+}
 
 func (c *Client) SearchPhotos(query string, perPage, page int) (*SearchResult, error) {
 	url := fmt.Sprintf(PhotoApi+"/search?query=%s&per_page=%d&page=%d", query, perPage, page)
