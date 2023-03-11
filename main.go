@@ -86,6 +86,19 @@ func (c *Client) requestDoWithAuth(method, url string) (*http.Response, err) {
 	return resp, nil
 
 }
+func (c *Client)GetPhoto(id int32)(*photo,error){
+	url:=fmt.Sprintf((PhotoApi+"/photos/%d" , id))
+	resp,err:=c.requestDoWithAuth("GET",url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	data,err:=ioutil.ReadAll(resp.Body)
+	var result Photo
+	err= json.Unmarshal(data,&result)
+	return &return,err
+
+}
 func main() {
 	os.Setenv("PexelsToken", "OLY1UXu7nWNqhhiV5XXXTcU8SHJPaMUEWzotNouYLKhqNuTyLsnXjgxS")
 	var TOKEN = os.Getenv("PexelsToken")
