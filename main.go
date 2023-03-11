@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 // api link
@@ -86,19 +88,41 @@ func (c *Client) requestDoWithAuth(method, url string) (*http.Response, err) {
 	return resp, nil
 
 }
-func (c *Client)GetPhoto(id int32)(*photo,error){
-	url:=fmt.Sprintf((PhotoApi+"/photos/%d" , id))
-	resp,err:=c.requestDoWithAuth("GET",url)
+func (c *Client) GetPhoto(id int32) (*Photo, error) {
+	url := fmt.Sprintf(PhotoApi+"/photos/%d", id)
+	resp, err := c.requestDoWithAuth("GET", url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	data,err:=ioutil.ReadAll(resp.Body)
+	data, err := ioutil.ReadAll(resp.Body)
 	var result Photo
-	err= json.Unmarshal(data,&result)
-	return &return,err
+	err = json.Unmarshal(data, &result)
+	return &result, err
 
 }
+
+func (c *Client) GetRandomPhoto() (*Photo, error) {
+	rand.Seed(time.Now().Unix())
+	randNum := rand.Intn(1001)
+	result, err := c.CuratedPhotos(1, randNum)
+	if err != nil && len(result.Photos) == 1 {
+		return &result.Photos[0], nil
+	}
+	return nil, err
+
+}
+
+func (c *Client) SearchVideo(query, perPage, page int) (*VideoSearchReasult, error) {
+
+}
+func (c *Client) PopularVideo(perPage, page int) (*PopularVideos, error) {
+
+}
+func (c *Client) GetRandomVideo() (*Video, error) {
+
+}
+
 func main() {
 	os.Setenv("PexelsToken", "OLY1UXu7nWNqhhiV5XXXTcU8SHJPaMUEWzotNouYLKhqNuTyLsnXjgxS")
 	var TOKEN = os.Getenv("PexelsToken")
